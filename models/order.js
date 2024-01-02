@@ -1,11 +1,16 @@
 const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
-    orderItems: [{
+    quantity:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'OrderItem'
+        
+    },orderItems: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'OrderItem',   
         required:true
     }],
+    
     shippingAddress1: {
         type: String,
         required: true,
@@ -76,7 +81,7 @@ Order Example:
     "shippingAddress1" : "Flowers Street , 45",
     "shippingAddress2" : "1-B",
     "city": "Prague",
-    "zip": "00000",
+    "zip": "00000", 
     "country": "Czech Republic",
     "phone": "+420702241333",
     "user": "5fd51bc7e39ba856244a3b44"
