@@ -3,8 +3,12 @@ const express = require('express');
 const { OrderItem } = require('../models/order-item');
 const router = express.Router();
 
+
 router.get(`/`, async (req, res) =>{
-    const orderList = await Order.find().populate('user', 'name').sort({'dateOrdered': -1});
+    const orderList = await Order.find().populate('user', 'name').populate({ 
+        path: 'orderItems', populate: {
+            path : 'product', populate: 'category'} 
+        }).sort({'dateOrdered': -1});
 
     if(!orderList) {
         res.status(500).json({success: false})
@@ -23,17 +27,18 @@ router.get(`/:id`, async (req, res) =>{
     if(!order) {
         res.status(500).json({success: false})
     } 
-    res.send(order);
+    res.send(order); 
 })
-
+ 
 router.post('/', async (req,res)=>{
+    console.log(req.body.orderItems);
     const orderItemsIds = Promise.all(req.body.orderItems.map(async (orderItem) =>{
         let newOrderItem = new OrderItem({
             quantity: orderItem.quantity,
             product: orderItem.product
         })
 
-        newOrderItem = await newOrderItem.save();
+        newOrderItem = await newOrderItem.save(); 
 
         return newOrderItem._id;
     }))
@@ -88,7 +93,7 @@ router.delete('/:id', (req, res)=>{
     Order.findOneAndDelete(req.params.id).then(async order =>{
         if(order) {
             await order.orderItems.map(async orderItem => {
-                await OrderItem.findByIdAndRemove(orderItem)
+                await OrderItem.findOneAndDelete(orderItem)
             })
             return res.status(200).json({success: true, message: 'the order is deleted!'})
         } else {
@@ -110,7 +115,7 @@ router.get('/get/totalsales', async (req, res)=> {
 
     res.send({totalsales: totalSales.pop().totalsales})
 })
-
+ 
 router.get('/get/count', async (req, res) => {
     const orderCount = await Order.countDocuments();
     if (!orderCount) {

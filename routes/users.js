@@ -44,7 +44,6 @@ router.post('/', async (req,res)=>{
 })
 
 router.put('/:id',async (req, res)=> {
-
     const userExist = await User.findById(req.params.id);
     let newPassword
     if(req.body.password) {
@@ -98,10 +97,7 @@ router.post('/login', async (req,res) => {
     } else {
        res.status(400).send('password is wrong!');
     }
-
-    
 })
-
 
 router.post('/register', async (req,res)=>{
     let user = new User({
@@ -123,7 +119,6 @@ router.post('/register', async (req,res)=>{
 
     res.send(user);
 })
-
 
 router.delete('/:id', (req, res)=>{
     User.findOneAndDelete(req.params.id).then(user =>{
@@ -162,4 +157,4 @@ module.exports =router;
 
 //{"email":"harsh@csmonitor.com","passwordHash":"9145454332"}
 //{"email": "jn0@csmonitor.com","passwordHash":"1378765432",}
-// {"email": "Dhruvi@csmonitor.com","passwordHash":"123456"}
+// {"email": "Dhruvi@csmonitor.com","passwordHash":"123456"}  

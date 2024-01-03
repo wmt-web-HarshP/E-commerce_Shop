@@ -55,7 +55,7 @@ router.put('/:inCartId', async (req, res) => {
             })
         }
 
-        if(type==="increament"){ 
+        if(type==="decreament"){ 
             inCartInstance.productItem.map((item)=>{
 
                 console.log(item.product,productId);

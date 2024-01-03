@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const mongoose = require('mongoose');
+const bodyParser = require('body-parser'); // http req,res
+const morgan = require('morgan'); // http req,res
+const mongoose = require('mongoose'); 
 const cors = require('cors'); //for frontend
 require('dotenv/config');
 const authJwt=require("./helpers/jwt")
@@ -17,19 +17,22 @@ app.use(morgan('tiny'));
 app.use(authJwt());
 app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 app.use(error_handler)
-    
+     
 //Routes
 const categoriesRoutes = require('./routes/categories');
 const productsRoutes = require('./routes/products');
 const usersRoutes = require('./routes/users');
 const ordersRoutes = require('./routes/orders');
-
+const inCartsRoutes=require('./routes/inCarts')
+ 
 const api = process.env.API_URL;
  
-app.use(`${api}/categories`, categoriesRoutes);
+app.use(`${api}/categories`, categoriesRoutes);     
 app.use(`${api}/products`, productsRoutes);
 app.use(`${api}/users`, usersRoutes);
 app.use(`${api}/orders`, ordersRoutes);
+
+app.use(`${api}/inCarts`,inCartsRoutes)
 
 //Database
 mongoose.connect(process.env.CONNECTION_STRING).then(()=>{
@@ -40,3 +43,9 @@ mongoose.connect(process.env.CONNECTION_STRING).then(()=>{
 app.listen(3004, ()=>{
     console.log('server is running http://localhost:3004');
 }) 
+
+
+
+
+// const addToCartsRoutes=require('../AddToCarts')
+// app.use(`${api}/addToCarts`,addToCartsRoutes)
