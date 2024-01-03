@@ -55,7 +55,17 @@ router.put('/:inCartId', async (req, res) => {
             })
         }
 
-        if(type==="decreament"){ 
+        if(type==="increament"){ 
+            inCartInstance.productItem.map((item)=>{
+
+                console.log(item.product,productId);
+              if(item.product.toString()===productId) {
+
+                console.log(item.product,productId);
+                item.qty=item.qty-1;
+              }     
+            })
+        }
 
         
     //     if (!inCartInstance) {
