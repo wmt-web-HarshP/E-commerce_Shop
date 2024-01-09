@@ -15,12 +15,12 @@ function authJwt(){
             `${api}/users/login`,
             `${api}/users/register`,
         ] 
-    })
+    }) 
 }
 async function isRevoked(req, jwt) {
 
     const payload = jwt.payload
-    if (!payload.isAdmin) {
+    if (!payload.isAdmin) { 
       return true
     }
     return false

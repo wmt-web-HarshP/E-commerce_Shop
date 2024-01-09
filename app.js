@@ -4,14 +4,14 @@ const bodyParser = require('body-parser'); // http req,res
 const morgan = require('morgan'); // http req,res
 const mongoose = require('mongoose'); 
 const cors = require('cors'); //for frontend
-require('dotenv/config');
+require('dotenv/config');  //env file required
 const authJwt=require("./helpers/jwt")
 const error_handler=require('./helpers/error_handler')
 
 app.use(cors());
 app.options('*', cors())
 
-//middleware
+//middleware 
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
 app.use(authJwt());
@@ -31,7 +31,6 @@ app.use(`${api}/categories`, categoriesRoutes);
 app.use(`${api}/products`, productsRoutes);
 app.use(`${api}/users`, usersRoutes);
 app.use(`${api}/orders`, ordersRoutes);
-
 app.use(`${api}/inCarts`,inCartsRoutes)
 
 //Database
@@ -40,12 +39,10 @@ mongoose.connect(process.env.CONNECTION_STRING).then(()=>{
 }).catch((err)=> {console.log(err)});
 
 //Server
-app.listen(3004, ()=>{
-    console.log('server is running http://localhost:3004');
+app.listen(3010, ()=>{
+    console.log('server is running http://localhost:3010');
 }) 
 
 
 
 
-// const addToCartsRoutes=require('../AddToCarts')
-// app.use(`${api}/addToCarts`,addToCartsRoutes)

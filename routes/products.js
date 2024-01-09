@@ -3,8 +3,7 @@ const express = require('express');
 const { Category } = require('../models/category');
 const router = express.Router();
 const mongoose = require('mongoose');
-const multer = require('multer')
-
+const multer = require('multer') //for file upload
 
 const FILE_TYPE_MAP = {
     'image/png': 'png',
@@ -38,7 +37,7 @@ router.get(`/`, async (req, res) => {
     if (req.query.categories) {
         filter = { category: req.query.categories.split(',') }
     }
- 
+
     const productList = await Product.find(filter).populate('category');
 
     if (!productList) {
@@ -46,7 +45,7 @@ router.get(`/`, async (req, res) => {
     }   //used to filter products based on the specified category or categories in the request.
     /* If a category ID is invalid or not found, it won't result in an error in this code; 
     instead, it will simply return an empty product list for that category or categories*/
-    res.send(productList); 
+    res.send(productList);
 })
 
 router.get(`/:id`, async (req, res) => {
@@ -79,14 +78,11 @@ router.post(`/`, uploadOptions.single('image'), async (req, res) => {
         countInStock: req.body.countInStock,
         rating: req.body.rating,
         numReviews: req.body.numReviews,
-        isFeatured: req.body.isFeatured,
-    })
-
-    product = await product.save();
-
+        isFeatured: req.body.isFeatured, 
+    }) 
+    product = await product.save(); 
     if (!product)
         return res.status(500).send('The product cannot be created')
-
     res.send(product);
 })
 
@@ -115,10 +111,8 @@ router.put('/:id', async (req, res) => {
         },
         { new: true }
     )
-
     if (!product)
         return res.status(500).send('the product cannot be updated!')
-
     res.send(product);
 })
 
@@ -141,16 +135,6 @@ router.get('/get/count', async (req, res) => {
     }
     res.send({ productCount: productCount });
 });
-// router.get(`/get/count`, async (req, res) =>{
-//     const productCount = await Product.countDocuments((count) => count)
-
-//     if(!productCount) {
-//         res.status(500).json({success: false})
-//     } 
-//     res.send({
-//         productCount: productCount 
-//     });
-// })
 
 router.get(`/get/featured/:count`, async (req, res) => {
     let count = req.params.count ? req.params.count : 0
@@ -161,7 +145,6 @@ router.get(`/get/featured/:count`, async (req, res) => {
     }
     res.send(products);
 })
-
 
 // router.put(
 //     '/gallery-images/:id', 
@@ -179,7 +162,6 @@ router.get(`/get/featured/:count`, async (req, res) => {
 //                 imagesPaths.push(`${basePath}${file.filename}`);
 //             })
 //          }
-
 //          const product = await Product.findByIdAndUpdate(
 //             req.params.id,
 //             {
@@ -187,13 +169,10 @@ router.get(`/get/featured/:count`, async (req, res) => {
 //             },
 //             { new: true}
 //         )
-
 //         if(!product)
 //             return res.status(500).send('the gallery cannot be updated!')
-
 //         res.send(product);
 //     }
 // )
-
 
 module.exports = router;

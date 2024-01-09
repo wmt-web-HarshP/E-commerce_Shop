@@ -23,13 +23,13 @@ const userSchema = new mongoose.Schema({
     },
     street: {
         type: String,
-        default: '' 
-    },  
+        default: ''
+    },
     apartment: {
         type: String,
         default: ''
     },
-    zip :{
+    zip: {
         type: String,
         default: ''
     },
@@ -41,7 +41,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ''
     }
-
 });
 
 userSchema.virtual('id').get(function () {
@@ -52,5 +51,5 @@ userSchema.set('toJSON', {
     virtuals: true,
 });
 
-exports.User= mongoose.model('User', userSchema);
+exports.User = mongoose.model('User', userSchema);
 exports.userSchema = userSchema;    
