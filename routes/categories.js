@@ -7,8 +7,8 @@ router.get(`/`, async (req, res) => {
     if (!categoryList) {
         res.status(500).json({ success: false })
     }
-    res.status(200).send(categoryList);
-})
+    res.status(200).send(categoryList); 
+}) 
 
 router.get(`/:id`, async (req, res) => {
     const category = await Category.findById(req.params.id);
@@ -21,7 +21,7 @@ router.get(`/:id`, async (req, res) => {
 
 router.post(`/`, async (req, res) => {
     let category = new Category({
-        name: req.body.name,
+        name: req.body.name, 
         icon: req.body.icon,
         color: req.body.color
     })
@@ -36,13 +36,13 @@ router.put(`/:id`, async (req, res) => {
         req.params.id,
         {
             name: req.body.name,
-            icon: req.body.icon,     //|| category.icon,
+            icon: req.body.icon,     //|| category.icon, 
             color: req.body.color,
         },
         { new: true }
     )
     if (!category)
-        return res.status(400).send('the category cannot be created!')
+        return res.status(400).send('the category cannot be updated!')
     res.send(category);
 })
 

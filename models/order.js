@@ -1,15 +1,19 @@
 const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
-   orderItems: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'OrderItem',   
-        required:true
-    }], quantity:{
+    orderItems: [{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'OrderItem'  
-    },
-    
+        ref:'OrderItem'
+    }
+        // {
+        //     product: {
+        //         type: mongoose.Schema.Types.ObjectId,
+        //         ref: 'Product'
+        //     }, quantity: {
+        //         type: Number
+        //     }
+        // },
+    ],
     shippingAddress1: {
         type: String,
         required: true,
@@ -44,14 +48,15 @@ const orderSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        require: true
     },
     dateOrdered: {
         type: Date,
         default: Date.now,
     },
-    incartItem:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'InCart'
+    incartItem: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'InCart'
     }
 })
 
@@ -62,7 +67,7 @@ orderSchema.virtual('id').get(function () {
 orderSchema.set('toJSON', {
     virtuals: true,
 });
- 
+
 exports.Order = mongoose.model('Order', orderSchema);
 
 

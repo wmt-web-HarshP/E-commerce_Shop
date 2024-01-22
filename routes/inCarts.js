@@ -8,8 +8,18 @@ router.get(`/`, async (req, res) => {
     if (!inCartList) {
         res.status(500).json({ success: false })
     }
-    res.status(200).send(inCartList);
+    res.status(200).send(inCartList); 
 }) 
+
+router.get('/:id',async (req,res)=>{
+    const id=req.params.id;
+    const item=await InCart.findById(id)
+    if(!item){
+        return res.status(404).json({msg:"No Item found"});
+        }else{
+            res.json(item);
+            }
+})
 
 router.post(`/`, async (req, res) => {
     let inCartList = new InCart({
@@ -23,6 +33,63 @@ router.post(`/`, async (req, res) => {
 
     res.send(inCartList);
 })
+
+router.put('/:inCartId', async (req, res) => {
+    const { inCartId } = req.params;
+    const { type,productId } = req.body;
+
+    const inCartInstance = await InCart.findById(inCartId);
+    console.log(type);
+
+        if(type==="increament"){ 
+            inCartInstance.productItem.map((item)=>{
+
+                console.log(item.product,productId);
+              if(item.product.toString()===productId) {
+ 
+                console.log(item.product,productId); 
+                item.qty=item.qty+1; 
+              }else{
+                return res.send(err) ;
+              }  
+            })
+        }
+ 
+        if(type==="decreament"){ 
+            inCartInstance.productItem.map((item)=>{
+
+                console.log(item.product,productId);
+              if(item.product.toString()===productId) {
+ 
+                console.log(item.product,productId);
+                item.qty=item.qty-1;
+              }else{
+                return res.send(err) ;
+              }    
+            })
+        }
+        await inCartInstance.save();
+        return res.json(inCartInstance);
+});
+
+router.delete('/:id', async (req, res) => {
+    let inCart = await InCart.findOneAndDelete(req.params.id).then(inCart => {
+        if (inCart) {
+            return res.status(200).json({ success: true, message: 'the InCart is deleted!' })
+        } else {
+            return res.status(404).json({ success: false, message: "InCart not found!" })
+        }
+    }).catch(err => {
+        return res.status(500).json({ success: false, error: err })
+    })
+})
+        
+
+module.exports=router           
+
+
+
+
 
 // router.post('/checkout/:id',async (req,res)=>{
 //     const checkoutID = await InCart.findById(req.params.id);
@@ -104,52 +171,3 @@ router.post(`/`, async (req, res) => {
 // //                 res.send(result)
 // //                  }
 // // })
-
-router.put('/:inCartId', async (req, res) => {
-    const { inCartId } = req.params;
-    const { type,productId } = req.body;
-
-    const inCartInstance = await InCart.findById(inCartId);
-    console.log(type);
-
-        if(type==="increament"){ 
-            inCartInstance.productItem.map((item)=>{
-
-                console.log(item.product,productId);
-              if(item.product.toString()===productId) {
-
-                console.log(item.product,productId);
-                item.qty=item.qty+1;
-              }     
-            })
-        }
-
-        if(type==="decreament"){ 
-            inCartInstance.productItem.map((item)=>{
-
-                console.log(item.product,productId);
-              if(item.product.toString()===productId) {
- 
-                console.log(item.product,productId);
-                item.qty=item.qty-1;
-              }     
-            })
-        }
-        await inCartInstance.save();
-        return res.json(inCartInstance);
-});
-
-router.delete('/:id', async (req, res) => {
-    let inCart = await InCart.findOneAndDelete(req.params.id).then(inCart => {
-        if (inCart) {
-            return res.status(200).json({ success: true, message: 'the InCart is deleted!' })
-        } else {
-            return res.status(404).json({ success: false, message: "InCart not found!" })
-        }
-    }).catch(err => {
-        return res.status(500).json({ success: false, error: err })
-    })
-})
-        
-
-module.exports=router           
